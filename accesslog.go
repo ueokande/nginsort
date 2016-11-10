@@ -7,7 +7,9 @@ import (
 	"time"
 )
 
+// An AccessLog presents a log information for each line of nginx log(s)
 type AccessLog struct {
+	// Access informations
 	Address   string
 	User      string
 	Date      time.Time
@@ -17,9 +19,11 @@ type AccessLog struct {
 	Refer     string
 	UserAgent string
 
+	// Original line
 	Origin string
 }
 
+// Parse parses a line of log(s) formatted by default nginx configuration.
 func Parse(line string) (*AccessLog, error) {
 	delimiters := [8]string{` - `, ` [`, `] "`, `" `, ` `, ` "`, `" "`, `"`}
 	fields := [8]string{}
@@ -63,6 +67,7 @@ func Parse(line string) (*AccessLog, error) {
 	return log, nil
 }
 
+// ByDate attaches the methods of interface to []AccessLog, sorting by date in increasing order.
 type ByDate []AccessLog
 
 func (s ByDate) Len() int {
